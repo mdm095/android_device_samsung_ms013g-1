@@ -34,42 +34,32 @@
 #include "log.h"
 #include "util.h"
 
-void init_variant_properties() {
+void vendor_load_properties()
+{
 
-	std::string bootloader = property_get("ro.bootloader");
-	
-	if (bootloader.find("I9301I")==0) {
-        /* s3ve3g */
-        property_set("ro.build.fingerprint", "samsung/s3ve3gxx/s3ve3g:4.4.2/KOT49H/I9301IXXUANL1:user/release-keys");
-        property_set("ro.build.description", "s3ve3gxx-user 4.4.2 KOT49H I9301IXXUANL1 release-keys");
-        property_set("ro.product.model", "GT-I9301I");
-        property_set("ro.product.device", "s3ve3g");
-        property_set("ro.telephony.default_network", "0");
-    } else if (bootloader.find("I9301Q")==0) {
-        /* s3ve3gjv */
-        property_set("ro.build.fingerprint", "samsung/s3ve3gjv/s3ve3g:4.4.2/KOT49H/I9301QXXUANH1:user/release-keys");
-        property_set("ro.build.description", "s3ve3gjv-user 4.4.2 KOT49H I9301QXXUANH1 release-keys");
-        property_set("ro.product.model", "GT-I9301Q");
-        property_set("ro.product.device", "s3ve3gjv");
-        property_set("ro.telephony.default_network", "0");
-    } else if (bootloader.find("I9300I")==0) {
-        /* s3ve3gds */
-        property_set("ro.build.fingerprint", "samsung/s3ve3gdsxx/s3ve3gds:4.4.4/KTU84P/I9300IXWUBNJ1:user/release-keys");
-        property_set("ro.build.description", "s3ve3gdsxx-user 4.4.4 KTU84P I9300IXWUBNJ1 release-keys");
-        property_set("ro.product.model", "GT-I9300I");
-        property_set("ro.product.device", "s3ve3gds");
-        property_set("ro.multisim.set_audio_params", "true");
-        property_set("ro.multisim.simslotcount", "2");
+    std::string bootloader = property_get("ro.bootloader");
+
+    if (bootloader.find("G7105") == 0) {
+        /* ms01lte */
+        property_set("ro.build.fingerprint", "samsung/ms01ltexx/ms01lte:4.4.2/KOT49H/G7105XXUBNI2:user/release-keys");
+        property_set("ro.build.description", "ms01ltexx-user 4.4.2 KOT49H G7105XXUBNI2 release-keys");
+        property_set("ro.product.model", "SM-G7105");
+        property_set("ro.product.device", "ms01lte");
+        property_set("ro.telephony.ril_class", "SamsungMSM8226RIL");
+        property_set("ro.telephony.default_network", "3");
+        property_set("telephony.lteOnCdmaDevice", "0");
+    } else if (bootloader.find("G7102") == 0) {
+        /* ms013g */
+        property_set("ro.build.fingerprint", "samsung/ms013gxx/ms013g:4.4.2/KOT49H/G7102XXUBOB1:user/release-keys");
+        property_set("ro.build.description", "ms013gxx-user 4.4.2 KOT49H G7102XXUBOB1 release-keys");
+        property_set("ro.product.model", "SM-G7102");
+        property_set("ro.product.device", "ms013g");
         property_set("persist.radio.multisim.config", "dsds");
-        property_set("ro.telephony.default_network", "0,1");
+        property_set("ro.telephony.ril_class", "SamsungMSM8226DSRIL");
+        property_set("ro.telephony.default_network", "3");
+        property_set("telephony.lteOnCdmaDevice", "0");
     }
 
     std::string device = property_get("ro.product.device");
-INFO("Found bootloader id %s setting build properties for %s device\n", bootloader.c_str(), device.c_str());
-
-}
-
-
-void vendor_load_properties() {
-    init_variant_properties();
+    INFO("Found bootloader id %s setting build properties for %s device\n", bootloader.c_str(), device.c_str());
 }

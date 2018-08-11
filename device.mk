@@ -16,7 +16,7 @@
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
 # Proprietary files
-$(call inherit-product, vendor/samsung/s3ve3g/s3ve3g-vendor.mk)
+$(call inherit-product, vendor/samsung/ms013g/ms013g-vendor.mk)
 
 # Audio configuration
 PRODUCT_COPY_FILES += \
@@ -24,9 +24,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/audio_policy.conf:system/etc/audio_policy.conf \
     $(LOCAL_PATH)/audio/mixer_paths.xml:system/etc/mixer_paths.xml
 
-# Doze
-PRODUCT_PACKAGES += \
-    SamsungDoze
+# Doze is not supported on omni!!
+#PRODUCT_PACKAGES += \
+#    SamsungDoze
 
 # Widevine
 PRODUCT_PACKAGES += \
