@@ -13,11 +13,11 @@
 # limitations under the License.
 
 # Inherit some common Lineage stuff.
-$(call inherit-product, vendor/omni/config/common.mk)
+$(call inherit-product, vendor/cm/config/common_full_phone.mk)
 
 # Inherit device configuration
 $(call inherit-product, device/samsung/ms013g/full_ms013g.mk)
 
 # Release name
-PRODUCT_RELEASE_NAME := GT-I9301I
-PRODUCT_NAME := omni_ms013g
+PRODUCT_RELEASE_NAME := SM-G7102
+PRODUCT_NAME := lineage_ms013g
