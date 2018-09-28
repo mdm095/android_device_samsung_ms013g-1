@@ -28,38 +28,54 @@
  */
 
 #include <stdlib.h>
+#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+#include <sys/_system_properties.h>
 
+#include <android-base/logging.h>
+#include <android-base/properties.h>
 #include "vendor_init.h"
 #include "property_service.h"
-#include "log.h"
-#include "util.h"
+
+using android::base::GetProperty;
+using android::init::property_set;
+
+void property_override(char const prop[], char const value[])
+{
+    prop_info *pi;
+
+    pi = (prop_info*) __system_property_find(prop);
+    if (pi)
+        __system_property_update(pi, value, strlen(value));
+    else
+        __system_property_add(prop, strlen(prop), value, strlen(value));
+}
 
 void vendor_load_properties()
 {
 
-    std::string bootloader = property_get("ro.bootloader");
+    std::string bootloader = GetProperty("ro.bootloader", "");
 
     if (bootloader.find("G7105") == 0) {
         /* ms01lte */
-        property_set("ro.build.fingerprint", "samsung/ms01ltexx/ms01lte:4.4.2/KOT49H/G7105XXUBNI2:user/release-keys");
-        property_set("ro.build.description", "ms01ltexx-user 4.4.2 KOT49H G7105XXUBNI2 release-keys");
-        property_set("ro.product.model", "SM-G7105");
-        property_set("ro.product.device", "ms01lte");
-        property_set("ro.telephony.ril_class", "SamsungMSM8226RIL");
-        property_set("ro.telephony.default_network", "3");
-        property_set("telephony.lteOnCdmaDevice", "0");
+        property_override("ro.build.fingerprint", "samsung/ms01ltexx/ms01lte:4.4.2/KOT49H/G7105XXUBNI2:user/release-keys");
+        property_override("ro.build.description", "ms01ltexx-user 4.4.2 KOT49H G7105XXUBNI2 release-keys");
+        property_override("ro.product.model", "SM-G7105");
+        property_override("ro.product.device", "ms01lte");
+        property_override("ro.telephony.ril_class", "SamsungMSM8226RIL");
+        property_override("ro.telephony.default_network", "3");
+        property_override("telephony.lteOnCdmaDevice", "0");
     } else if (bootloader.find("G7102") == 0) {
         /* ms013g */
-        property_set("ro.build.fingerprint", "samsung/ms013gxx/ms013g:4.4.2/KOT49H/G7102XXUBOB1:user/release-keys");
-        property_set("ro.build.description", "ms013gxx-user 4.4.2 KOT49H G7102XXUBOB1 release-keys");
-        property_set("ro.product.model", "SM-G7102");
-        property_set("ro.product.device", "ms013g");
-        property_set("persist.radio.multisim.config", "dsds");
-        property_set("ro.telephony.ril_class", "SamsungMSM8226DSRIL");
-        property_set("ro.telephony.default_network", "3");
-        property_set("telephony.lteOnCdmaDevice", "0");
+        property_override("ro.build.fingerprint", "samsung/ms013gxx/ms013g:4.4.2/KOT49H/G7102XXUBOB1:user/release-keys");
+        property_override("ro.build.description", "ms013gxx-user 4.4.2 KOT49H G7102XXUBOB1 release-keys");
+        property_override("ro.product.model", "SM-G7102");
+        property_override("ro.product.device", "ms013g");
+        property_override("persist.radio.multisim.config", "dsds");
+        property_override("ro.telephony.ril_class", "SamsungMSM8226DSRIL");
+        property_override("ro.telephony.default_network", "3");
+        property_override("telephony.lteOnCdmaDevice", "0");
     }
 
-    std::string device = property_get("ro.product.device");
-    INFO("Found bootloader id %s setting build properties for %s device\n", bootloader.c_str(), device.c_str());
+    std::string device = GetProperty("ro.product.device", "");
+    LOG(INFO) << "Found bootloader id " <<  bootloader.c_str() << ", setting build properties for " << device.c_str() << " device\n";
 }

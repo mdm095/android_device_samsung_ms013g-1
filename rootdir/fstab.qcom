@@ -18,3 +18,6 @@
 # Vold managed volumes
 /devices/msm_sdcc.2/mmc_host/mmc1*                  auto            auto    defaults                                                                                        voldmanaged=sdcard1:auto,encryptable=userdata
 /devices/platform/msm_hsusb_host/usb*               auto            auto    defaults                                                                                        voldmanaged=usbdisk:auto
+
+# Zram
+/dev/block/zram0                                    none            swap    defaults                                                                                        zramsize=402653184

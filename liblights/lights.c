@@ -36,7 +36,6 @@ static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 char const*const PANEL_FILE = "/sys/class/leds/lcd-backlight/brightness";
 char const*const BUTTON_FILE = "/sys/class/leds/button-backlight/brightness";
 
-#ifdef SUPPORT_LED_NOTIFICATION
 char const*const LED_BLINK = "/sys/class/sec/led/led_blink";
 
 struct led_config {
@@ -46,7 +45,6 @@ struct led_config {
 
 static struct led_config g_leds[3]; // For battery, notifications, and attention.
 static int g_cur_led = -1;          // Presently showing LED of the above.
-#endif // SUPPORT_LED_NOTIFICATION
 
 void init_g_lock(void)
 {
@@ -127,7 +125,6 @@ static int rgb_to_brightness(struct light_state_t const *state)
 }
 
 /* Previously used by set_light_leds.
-#ifdef SUPPORT_LED_NOTIFICATION
 static int get_calibrated_color(struct light_state_t const *state, int brightness)
 {
     int red = (state->color >> 16) & 0xFF;
@@ -136,7 +133,6 @@ static int get_calibrated_color(struct light_state_t const *state, int brightnes
 
     return (((red * brightness) / 255) << 16) + (((green * brightness) / 255) << 8) + ((blue * brightness) / 255);
 }
-#endif // SUPPORT_LED_NOTIFICATION
 */
 
 static int is_lit(struct light_state_t const* state)
@@ -181,7 +177,6 @@ static int close_lights(struct light_device_t *dev)
     return 0;
 }
 
-#ifdef SUPPORT_LED_NOTIFICATION
 /* LEDs */
 static int write_leds(const struct led_config *led)
 {
@@ -316,7 +311,6 @@ static int set_light_leds_attention(UNUSED struct light_device_t *dev,
 
     return set_light_leds(&fixed, 2);
 }
-#endif // SUPPORT_LED_NOTIFICATION
 
 static int open_lights(const struct hw_module_t *module, char const *name,
                         struct hw_device_t **device)
@@ -328,14 +322,12 @@ static int open_lights(const struct hw_module_t *module, char const *name,
         set_light = set_light_backlight;
     else if (0 == strcmp(LIGHT_ID_BUTTONS, name))
         set_light = set_light_buttons;
-#ifdef SUPPORT_LED_NOTIFICATION
     else if (0 == strcmp(LIGHT_ID_BATTERY, name))
         set_light = set_light_leds_battery;
     else if (0 == strcmp(LIGHT_ID_NOTIFICATIONS, name))
         set_light = set_light_leds_notifications;
     else if (0 == strcmp(LIGHT_ID_ATTENTION, name))
         set_light = set_light_leds_attention;
-#endif // SUPPORT_LED_NOTIFICATION
     else
         return -EINVAL;
 
